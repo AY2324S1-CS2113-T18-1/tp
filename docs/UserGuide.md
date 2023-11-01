@@ -15,6 +15,16 @@
 
 {Give detailed description of each feature}
 
+### Minimax algorithm
+
+The minimax algorithm is used to determine the best move for the CPU to make. The algorithm works by recursively populating the scores of the child nodes and returning the best move for the CPU to make.
+
+The child nodes are populated by alternatingly minimising opponent scores and maximising CPU scores. The algorithm is implemented in the `Minimax` class.
+
+These child nodes then populate the scores of their child nodes and so on until the algorithm reaches the maximum depth. The maximum depth is set to 3 by default and is a proxy for difficulty.
+
+
+
 ### Adding a todo: `todo`
 Adds a new item to the list of todo items.
 
@@ -28,6 +38,7 @@ Example of usage:
 `todo n/Write the rest of the User Guide d/next week`
 
 `todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
+
 
 ## FAQ
 

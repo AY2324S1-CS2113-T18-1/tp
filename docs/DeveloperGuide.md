@@ -97,6 +97,16 @@ How the parsing works:
 
 The minimax algorithm is used to determine the best move for the AI to make. It is a recursive algorithm that works by alternatingly minimising opponent scores and maximising CPU scores. The algorithm is implemented in the `Minimax` class.
 
+![](images/MiniMaxSequenceDiagram.png)
+
+How the minimax algorithm works:
+1. The `Minimax` class is called by the `Game` class to determine the best move for the CPU to make.
+2. The `Minimax` class calls the `getPossibleMoves` method in the `ChessBoard` class to get all possible moves for the CPU.
+3. The `Minimax` class then calls the `getBestMove` method to determine the best move for the CPU to make by maximising CPU score and minimizing the player score.
+4. The `getBestMove` method calls the `getBestMove` method recursively to populate the child scores.
+5. The `getBestMove` method returns the best move for the CPU to make.
+
+
 ### Storage Component
 **API:**
 

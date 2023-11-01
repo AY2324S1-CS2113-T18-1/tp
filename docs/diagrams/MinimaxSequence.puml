@@ -1,0 +1,67 @@
+@startuml MiniMaxSequenceDiagram
+
+actor CPU as user #BlanchedAlmond
+participant MiniMax as MM #IndianRed
+participant ChessBoard as CB #LightPink
+participant Move as M #Orange
+participant BoardScoreTuple as BST #SkyBlue
+participant Exception as E #PaleTurquoise
+
+activate MM #AliceBlue
+
+user -> MM : getBestMove()
+
+MM -> MM : mostPoints()
+
+loop ["depth < maxDepth"]
+
+    MM -> CB : getBoard()
+    activate CB
+    CB --> MM : ChessBoard
+    deactivate CB
+
+    MM -> MM : Initialize variables
+    MM -> CB : getPoints()
+    activate CB
+    CB --> MM : points
+    deactivate CB
+    MM -> CB : Clone board
+    activate CB
+    
+    CB --> CB : board.clone()
+    activate CB
+
+    CB -> M** : setPiece()
+    activate M
+    M -> CB : Execute move
+    deactivate M
+    CB -> CB : Calculate new score
+    CB -> BST** : Create BoardScoreTuple
+    activate BST
+    BST --> BST : BoardScoreTuple
+    deactivate BST
+    CB -> E : Handle exception (if any)
+    deactivate CB
+    CB -> MM : Continue loop
+    deactivate CB
+
+    MM -> MM : Recursively call mostPoints()
+    MM -> MM : Update bestScore
+    MM -> MM : Update bestTuple
+
+end
+
+MM -> BST : getBestMove()
+activate BST
+BST --> MM : bestMove
+deactivate BST
+
+MM -> user : Return bestMove
+deactivate MM
+destroy MM
+destroy CB
+destroy M
+destroy BST
+destroy E
+
+@enduml
