@@ -1,64 +1,34 @@
-# Duke project template
+<a name="readme-top"></a>
 
-This is a project template for a greenfield Java project. It's named after Chess and Master. Given below are instructions on how to use it.
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="">
+    <img src="docs/images/readme/ChessMasterLogo.png" alt="Logo" width="80" height="80">
+  </a>
+<h3 align="center">ChessMaster</h3>
 
-## Setting up in Intellij
+  <p align="center">
+    Chess finally makes it to your terminal.
+    <br />
+    <a href="https://ay2324s1-cs2113-t18-1.github.io/tp/UserGuide.html">View User Guide</a>
+    ·
+    <a href="https://ay2324s1-cs2113-t18-1.github.io/tp/DeveloperGuide.html">View Developer Guide</a>
+    .
+    <a href="https://ay2324s1-cs2113-t18-1.github.io/tp/AboutUs.html">About Us</a>
+  </p>
+</div>
 
-Prerequisites: JDK 11 (use the exact version), update Intellij to the most recent version.
+ChessMaster is a command-line interface (CLI) chess game designed to make learning and training accessible for 
+beginners while offering an engaging experience for all skill levels. This simple and user-friendly chess simulator 
+provides a platform for novice players to build their skills and understanding of the game.
 
-1. **Ensure Intellij JDK 11 is defined as an SDK**, as described [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk) -- this step is not needed if you have used JDK 11 in a previous Intellij project.
-1. **Import the project _as a Gradle project_**, as described [here](https://se-education.org/guides/tutorials/intellijImportGradleProject.html).
-1. **Verify the set up**: After the importing is complete, locate the `src/main/java/seedu/duke/Duke.java` file, right-click it, and choose `Run Duke.main()`. If the setup is correct, you should see something like the below:
-   ```
-   > Task :compileJava
-   > Task :processResources NO-SOURCE
-   > Task :classes
-   
-   > Task :Duke.main()
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   
-   What is your name?
-   ```
-   Type some word and press enter to let the execution proceed to the end.
+This project was created for the CS2113: Software Engineering and Object-Oriented Programming team project and 
+is programmed in 100% Java.
 
-## Build automation using Gradle
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[product-screenshot-1]: docs/images/readme/ChessMasterOpener.png
 
-* This project uses Gradle for build automation and dependency management. It includes a basic build script as well (i.e. the `build.gradle` file).
-* If you are new to Gradle, refer to the [Gradle Tutorial at se-education.org/guides](https://se-education.org/guides/tutorials/gradle.html).
-
-## Testing
-
-### I/O redirection tests
-
-* To run _I/O redirection_ tests (aka _Text UI tests_), navigate to the `text-ui-test` and run the `runtest(.bat/.sh)` script.
-
-### JUnit tests
-
-* A skeleton JUnit test (`src/test/java/seedu/duke/DukeTest.java`) is provided with this project template. 
-* If you are new to JUnit, refer to the [JUnit Tutorial at se-education.org/guides](https://se-education.org/guides/tutorials/junit.html).
-
-## Checkstyle
-
-* A sample CheckStyle rule configuration is provided in this project.
-* If you are new to Checkstyle, refer to the [Checkstyle Tutorial at se-education.org/guides](https://se-education.org/guides/tutorials/checkstyle.html).
-
-## CI using GitHub Actions
-
-The project uses [GitHub actions](https://github.com/features/actions) for CI. When you push a commit to this repo or PR against it, GitHub actions will run automatically to build and verify the code as updated by the commit/PR.
-
-## Documentation
-
-`/docs` folder contains a skeleton version of the project documentation.
-
-Steps for publishing documentation to the public: 
-1. If you are using this project template for an individual project, go your fork on GitHub.<br>
-   If you are using this project template for a team project, go to the team fork on GitHub.
-1. Click on the `settings` tab.
-1. Scroll down to the `GitHub Pages` section.
-1. Set the `source` as `master branch /docs folder`.
-1. Optionally, use the `choose a theme` button to choose a theme for your documentation.
+[Java]: https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=java&logoColor=white
+[Java-url]: https://www.java.com/en/
