@@ -62,7 +62,7 @@ public class MiniMax {
             Move move = moves[i];
             Coordinate from = move.getFrom();
             ChessPiece piece = newBoard.getPieceAtCoor(from);
-            move.setPiece(piece);
+            move.setPieceMoved(piece);
             try {
                 newBoard.executeMove(move);
                 //get the score of the board after the move

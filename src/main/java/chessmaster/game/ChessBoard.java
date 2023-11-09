@@ -6,6 +6,7 @@ import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.EmptyPiece;
 import chessmaster.pieces.King;
 import chessmaster.pieces.Pawn;
 import chessmaster.user.CPU;
@@ -152,14 +153,13 @@ public class ChessBoard {
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
-                Coordinate coor = new Coordinate(col, row);
-                ChessPiece piece = getPieceAtCoor(coor);
+                Coordinate currentCoor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(currentCoor);
 
                 if (piece.isSameColorAs(color)) {
                     Coordinate[] possibleCoordinates = piece.getLegalCoordinates(this);
                     for (Coordinate possible: possibleCoordinates) {
-                        Move move = new Move(coor, possible, piece);
-                        allMoves.add(move);
+                        allMoves.add(MoveFactory.createMove(this, currentCoor, possible));
                     }
                 }
             }
@@ -199,7 +199,7 @@ public class ChessBoard {
      * @param coor The coordinate of the position to retrieve the tile for.
      * @return The ChessTile object at the specified coordinate.
      */
-    private ChessTile getTileAtCoor(Coordinate coor) {
+    public ChessTile getTileAtCoor(Coordinate coor) {
         return board[coor.getY()][coor.getX()];
     }
 
@@ -226,7 +226,7 @@ public class ChessBoard {
     public void executeMove(Move move) throws InvalidMoveException {
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
-        ChessPiece chessPiece = move.getPiece();
+        ChessPiece chessPiece = move.getPieceMoved();
 
 
         chessPiece.setHasMoved();
@@ -256,10 +256,10 @@ public class ChessBoard {
 
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
-        } else if (move.getPiece() instanceof Pawn && hasEnPassant()) {
+        } else if (move.getPieceMoved() instanceof Pawn && hasEnPassant()) {
             Coordinate to = move.getTo();
             Coordinate enPassantCoor = getEnPassantCoor();
-            if (move.getPiece().getColor() == playerColor) {
+            if (move.getPieceMoved().getColor() == playerColor) {
                 enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
             } else {
                 enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
@@ -294,7 +294,7 @@ public class ChessBoard {
 
     //@@author ken-ruster
     public boolean canPromote(Move move) {
-        ChessPiece piece = move.getPiece();
+        ChessPiece piece = move.getPieceMoved();
         Coordinate endCoord = move.getTo();
 
         if (!piece.isPawn()) {
@@ -442,6 +442,11 @@ public class ChessBoard {
 
     public boolean isPieceOpponent(ChessPiece otherPiece) {
         return this.playerColor != otherPiece.getColor();
+    }
+
+    public boolean isTileOccupied(Coordinate coord) {
+        ChessPiece piece = this.getPieceAtCoor(coord);
+        return piece == null || !(piece instanceof EmptyPiece);
     }
 
     //@@author ken_ruster

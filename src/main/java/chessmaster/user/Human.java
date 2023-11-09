@@ -26,7 +26,7 @@ public class Human extends Player {
      * @param move The piece being promoted.
      */
     public void handlePromote(ChessBoard board, TextUI ui, Move move) {
-        ChessPiece pawnPiece = move.getPiece();
+        ChessPiece pawnPiece = move.getPieceMoved();
         if (!pawnPiece.isPawn()) {
             return;
         }

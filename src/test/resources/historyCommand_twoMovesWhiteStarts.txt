@@ -90,8 +90,8 @@ _________________________________________________________________
 
 _________________________________________________________________
 
-Move 2 (currently highlighted) was BLACK moving their Knight from g8 to f6.
 Move 1: WHITE moves Pawn from a2 to a3
+Move 2: BLACK moves Knight from g8 to f6
 
 _________________________________________________________________
 

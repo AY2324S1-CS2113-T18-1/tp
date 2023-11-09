@@ -17,7 +17,7 @@ public class PromoteMove extends Move {
      */
     @Override
     public String toFileString() {
-        String out = String.format(PROMOTE_MOVE_STRING, this.getFrom(), this.getPiece().toString());
+        String out = String.format(PROMOTE_MOVE_STRING, this.getFrom(), this.getPieceMoved().toString());
         return out;
     }
 }

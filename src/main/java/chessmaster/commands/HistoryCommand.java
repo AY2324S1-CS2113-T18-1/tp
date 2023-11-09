@@ -3,74 +3,102 @@ package chessmaster.commands;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.game.Game;
 import chessmaster.game.Move;
-import chessmaster.user.CPU;
-import chessmaster.user.Human;
 import chessmaster.user.Player;
 
 import java.util.ArrayList;
+
+class PlayerMoveTuple {
+    private Player player;
+    private Move move;
+
+    public PlayerMoveTuple(Player player, Move move) {
+        this.player = player;
+        this.move = move;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Move getMove() {
+        return move;
+    }
+}
 
 public class HistoryCommand extends Command {
 
     public static final String HISTORY_COMMAND_STRING = "history";
 
+    public static ArrayList<PlayerMoveTuple> getAllMovesInChronologicalOrder(Game game) {
+        int totalMoves = game.getNumMoves();
+        ArrayList<PlayerMoveTuple> allMoves = new ArrayList<>();
+
+        Player currentPlayer = game.getCurrentPlayer();
+        ArrayList<Move> currentPlayerMoves = currentPlayer.getMoves();
+        Player opponent = currentPlayer.isHuman() ? game.getCPU() : game.getHuman();
+        ArrayList<Move> opponentMoves = opponent.getMoves();
+
+        int j = (int) Math.floor(totalMoves / 2);
+        for (int i = 0; i <= j; i++) {
+            // If totalMoves is odd, that means the current player is NOT the player
+            // who started playing. The first move of the game was from opponent.
+            if (totalMoves % 2 != 0) {
+                allMoves.add(new PlayerMoveTuple(opponent, opponentMoves.get(i)));
+                if (i == j) {
+                    break; // to account for the odd number of moves
+                }
+                allMoves.add(new PlayerMoveTuple(currentPlayer, currentPlayerMoves.get(i)));
+            } else {
+                if (i == j) {
+                    break;
+                }
+                allMoves.add(new PlayerMoveTuple(currentPlayer, currentPlayerMoves.get(i)));
+                allMoves.add(new PlayerMoveTuple(opponent, opponentMoves.get(i)));
+            }
+        }
+
+        return allMoves;
+    }
+
     @Override
     public CommandResult execute(Game game) throws ChessMasterException {
-        CPU cpu = game.getCPU();
-        Human human = game.getHuman();
         int numMoves = game.getNumMoves();
-
         if (numMoves == 0) {
             return new CommandResult("No moves have been played yet!");
         }
 
-        // currentPlayer has yet to make a move when `history` is called
-        // i.e. opponent has just played
-        Player currentPlayer = game.getCurrentPlayer();
-        ArrayList<Move> currentPlayerMoves = currentPlayer.getMoves();
-        Player opponent = currentPlayer.isHuman() ? cpu : human;
-        ArrayList<Move> opponentMoves = opponent.getMoves();
+        ArrayList<PlayerMoveTuple> allMoves = getAllMovesInChronologicalOrder(game);
 
         StringBuilder returnStringBuilder = new StringBuilder();
+        int moveCounter = 1;
+        for (PlayerMoveTuple tuple : allMoves) {
+            Move move = tuple.getMove();
+            Player player = tuple.getPlayer();
 
-        Move lastMove = opponentMoves.get(opponentMoves.size() - 1);
-        String lastMoveStr = String.format(
-                "Move %d (currently highlighted) was %s moving their %s from %s to %s.\n",
-                numMoves,
-                opponent.getColour(),
-                lastMove.getPiece().getPieceName(),
-                lastMove.getFrom(),
-                lastMove.getTo()
-        );
-        returnStringBuilder.append(lastMoveStr);
-
-        int numMovesCopy = numMoves - 1;
-        for (int i = currentPlayerMoves.size() - 1; i >= 0; i--) {
-            Move currentPlayerMove = currentPlayerMoves.get(i);
-            String currentPlayerString = String.format(
-                    "Move %d: %s moves %s from %s to %s\n",
-                    numMovesCopy,
-                    currentPlayer.getColour(),
-                    currentPlayerMove.getPiece().getPieceName(),
-                    currentPlayerMove.getFrom(),
-                    currentPlayerMove.getTo()
-            );
-            returnStringBuilder.append(currentPlayerString);
-
-            if (numMoves > 2) {
-                numMovesCopy--;
-
-                Move opponentMove = opponentMoves.get(i);
-                String opponentString = String.format(
-                        "Move %d: %s moves %s from %s to %s\n",
-                        numMovesCopy,
-                        opponent.getColour(),
-                        opponentMove.getPiece().getPieceName(),
-                        opponentMove.getFrom(),
-                        opponentMove.getTo()
+            String moveString;
+            if (move.hasCapturedAPiece()) {
+                moveString = String.format(
+                        "Move %d: %s moves %s from %s to %s capturing the opponent's %s!\n",
+                        moveCounter,
+                        player.getColour(),
+                        move.getPieceMoved().getPieceName(),
+                        move.getFrom(),
+                        move.getTo(),
+                        move.getPieceCaptured().getPieceName()
                 );
-                returnStringBuilder.append(opponentString);
-                numMovesCopy--;
+            } else {
+                moveString = String.format(
+                        "Move %d: %s moves %s from %s to %s\n",
+                        moveCounter,
+                        player.getColour(),
+                        move.getPieceMoved().getPieceName(),
+                        move.getFrom(),
+                        move.getTo()
+                );
             }
+            returnStringBuilder.append(moveString);
+
+            moveCounter++;
         }
 
         return new CommandResult(returnStringBuilder.toString());

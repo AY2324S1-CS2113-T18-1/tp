@@ -21,6 +21,7 @@ public class MoveCommand extends Command {
     private static final String EMPTY_PAYLOAD_ERROR_STRING = NO_MOVE_FOUND_STRING + System.lineSeparator() + 
         MOVE_FORMAT_STRING + System.lineSeparator() + MOVE_EXAMPLE_STRING;
     private static final String MOVE_PIECE_MESSAGE = "You moved %s from %s to %s";
+    private static final String MOVE_AND_CAPTURE_MESSAGE = "You moved %s from %s to %s and captured the opponent's %s!";
 
     private String userInput;
     private Move move;
@@ -50,9 +51,18 @@ public class MoveCommand extends Command {
             throw new InvalidMoveException();
         }
 
-        String pieceString = move.getPiece().getClass().getSimpleName();
-        String displayString = String.format(MOVE_PIECE_MESSAGE, pieceString, move.getFrom(), move.getTo());
-        return new CommandResult(displayString);
+        String pieceString = move.getPieceMoved().getClass().getSimpleName();
+
+        String returnString;
+        if (move.hasCapturedAPiece()) {
+            returnString = String.format(
+                    MOVE_AND_CAPTURE_MESSAGE,
+                    pieceString, move.getFrom(), move.getTo(), move.getPieceCaptured().getPieceName()
+            );
+        } else {
+            returnString = String.format(MOVE_PIECE_MESSAGE, pieceString, move.getFrom(), move.getTo());
+        }
+        return new CommandResult(returnString);
     }
 
     public Move getMove() throws InvalidMoveException {
